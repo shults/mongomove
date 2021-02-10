@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	app := application.NewCliApp(os.Args)
+	app := application.NewCliRunner(os.Args)
 	app.Run()
 }

@@ -6,12 +6,14 @@ type applicationOptions struct {
 	// print help required
 	Help bool
 	// path to config file
-	Config             string
+	Config string
 	// unrecognized arguments
 	UnrecognizedArgs []string
+	// enable dry run
+	DryRun bool
 }
 
-func (opts *applicationOptions) addUnrecognizedArgument(arg string)  {
+func (opts *applicationOptions) addUnrecognizedArgument(arg string) {
 	opts.UnrecognizedArgs = append(opts.UnrecognizedArgs, arg)
 }
 
@@ -21,6 +23,10 @@ func (opts *applicationOptions) hasUnrecognizedArgs() bool {
 
 func (opts *applicationOptions) showHelp() {
 	opts.Help = true
+}
+
+func (opts *applicationOptions) enableDryRun() {
+	opts.DryRun = true
 }
 
 func parseOptions(args []string) *applicationOptions {
@@ -42,13 +48,16 @@ func parseOptions(args []string) *applicationOptions {
 			opts.showHelp()
 
 		case "-c", "--config":
-			if i + 1 < argsLen {
-				opts.Config = args[i + 1]
+			if i+1 < argsLen {
+				opts.Config = args[i+1]
 				i += 1
 			} else {
 				opts.showHelp()
 			}
-			break
+
+		case "--dry-run":
+			opts.enableDryRun()
+
 		default:
 			opts.addUnrecognizedArgument(v)
 			opts.showHelp()
